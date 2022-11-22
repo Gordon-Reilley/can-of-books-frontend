@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
+import './bestBooks.css';
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -34,9 +35,9 @@ class BestBooks extends React.Component {
             width='30%'
           />
           <Carousel.Caption>
-            <h3>{book.title}</h3>
-            <p>{book.description}</p>
-            <p>{book.status}</p>
+            <h3 className='title'>{book.title}</h3>
+            <p className='desStatus'>{book.description}</p>
+            <p className='desStatus'>{book.status}</p>
           </Carousel.Caption>
         </Carousel.Item>
 
