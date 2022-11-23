@@ -26,13 +26,41 @@ class BestBooks extends React.Component {
     })
   }
 
+  handleBookSubmit = (e) => {
+    e.preventDefault();
+    let newBook = {
+      title: e.target.title.value,
+      description: e.target.description.value,
+      status: e.target.status.value
+    }
+    this.postBook(newBook);
+  }
+
   getBooks = async() => {
-    const booksURL = `${process.env.REACT_APP_SERVER}/book`
-    let bookResults = await axios.get(booksURL);
-    this.setState({
-      books: bookResults.data
-    })
-    console.log(bookResults);
+    try {
+      const booksURL = `${process.env.REACT_APP_SERVER}/book`
+      let bookResults = await axios.get(booksURL);
+      this.setState({
+        books: bookResults.data
+      });
+      console.log(bookResults);
+    } catch(error) {
+      console.log('we have an error: ', error.response.data);
+    }
+  }
+
+  postBook = async(newBook) => {
+    try {
+      const bookThatWasAdded = await axios.post(`${process.env.REACT_APP_SERVER}/book`, newBook);
+      const aBook = bookThatWasAdded.data
+      
+      this.setState({
+        books: [...this.state.books, aBook]
+      })
+
+    }catch(err) {
+      console.log('We have an error: ', err.response.data);
+    }
   }
 
   componentDidMount = () => {
@@ -72,7 +100,7 @@ class BestBooks extends React.Component {
           <h3>No Books Found :(</h3>
         )}
         <Button onClick={this.handleOpenModal} className='add-book-button'>Add Book</Button>
-        <BookFormModal show={this.state.openModal} onHide={this.handleCloseModal}/>
+        <BookFormModal show={this.state.openModal} onHide={this.handleCloseModal} handleBookSubmit={this.handleBookSubmit}/>
       </>
     )
   }

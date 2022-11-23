@@ -4,7 +4,6 @@ import {Button, Form, Modal} from 'react-bootstrap';
 class BookFormModal extends React.Component {
 
   render() {
-    console.log('hi from line 7');
     return (
       <>
         <Modal
@@ -16,29 +15,27 @@ class BookFormModal extends React.Component {
               New Book
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group className="newBookTitle" controlId="formNewTitle">
-                <Form.Label>
-                  Book Title
-                </Form.Label>
-                <Form.Control type="text" placeholder="Enter Book Title" />
-              </Form.Group>
-              <Form.Group className="newBookDescription" controlId="formNewDescription">
-                <Form.Label>Description</Form.Label>
-                <Form.Control type="text" placeholder="Enter Book Description" />
-              </Form.Group>
-              <Form.Group className="newBookStatus" controlId="formNewStatus">
-                <Form.Label>Status</Form.Label>
-                <Form.Control type="text" placeholder="Enter Book Status" />
-              </Form.Group>
+            <Form onSubmit={this.props.handleBookSubmit}>
+              <Modal.Body>
+                <Form.Group className="newBookTitle" controlId="title">
+                  <Form.Label>Book Title</Form.Label>
+                  <Form.Control type="text" placeholder="Enter Book Title"/>
+                </Form.Group>
+                <Form.Group className="newBookDescription" controlId="description">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control type="text" placeholder="Enter Book Description"/>
+                </Form.Group>
+                <Form.Group className="newBookStatus" controlId="status">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Control type="text" placeholder="Enter Book Status"/>
+                </Form.Group>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" type="submit">
+                  Submit New Book
+                </Button>
+              </Modal.Footer>
             </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" type="submit">
-              Submit New Book
-            </Button>
-          </Modal.Footer>
         </Modal>
       </>
     )
