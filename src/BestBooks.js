@@ -1,14 +1,29 @@
 import React from 'react';
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
+import Button from 'react-bootstrap/Button';
+import BookFormModal from './BookFormModal';
 import './bestBooks.css';
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: [],
+      openModal: false
     }
+  }
+
+  handleOpenModal = () => {
+    this.setState({
+      openModal: true
+    })
+  }
+
+  handleCloseModal = () => {
+    this.setState({
+      openModal: false
+    })
   }
 
   getBooks = async() => {
@@ -39,6 +54,7 @@ class BestBooks extends React.Component {
             <p className='desStatus'>{book.description}</p>
             <p className='desStatus'>{book.status}</p>
           </Carousel.Caption>
+          
         </Carousel.Item>
 
       );
@@ -47,7 +63,7 @@ class BestBooks extends React.Component {
     return (
       <>
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
-
+        
         {this.state.books.length ? (
           <Carousel>
            {booksDisplay}
@@ -55,6 +71,8 @@ class BestBooks extends React.Component {
         ) : (
           <h3>No Books Found :(</h3>
         )}
+        <Button onClick={this.handleOpenModal} className='add-book-button'>Add Book</Button>
+        <BookFormModal show={this.state.openModal} onHide={this.handleCloseModal}/>
       </>
     )
   }
