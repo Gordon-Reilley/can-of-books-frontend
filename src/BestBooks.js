@@ -3,6 +3,7 @@ import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
 import Button from 'react-bootstrap/Button';
 import BookFormModal from './BookFormModal';
+import UpdateBookForm from './UpdateBookForm';
 import './bestBooks.css';
 
 class BestBooks extends React.Component {
@@ -10,7 +11,8 @@ class BestBooks extends React.Component {
     super(props);
     this.state = {
       books: [],
-      openModal: false
+      openModal: false,
+      openUpdateModal: false,
     }
   }
 
@@ -23,6 +25,18 @@ class BestBooks extends React.Component {
   handleCloseModal = () => {
     this.setState({
       openModal: false
+    })
+  }
+
+  handleOpenUpdateModal = () => {
+    this.setState({
+      openUpdateModal: true
+    })
+  }
+
+  handleCloseUpdateModal = () => {
+    this.setState({
+      openUpdateModal: false
     })
   }
 
@@ -76,6 +90,26 @@ class BestBooks extends React.Component {
     }
   }
 
+  updatedBook = async (bookToUpdate) => {
+    try {
+      let url = `${process.env.REACT_APP_SERVER}/book/${bookToUpdate._id}`;
+      let updatedBookObj = await axios.put(url, bookToUpdate);
+
+      console.log('inside updateBook Function');
+      
+      // find the book we updated in state, and replace it with the data we got back from the database
+      let updateBooksArray = this.state.books.map(book => {
+        return book._id === bookToUpdate._id ? updatedBookObj.data : book;
+      });
+      this.setState({
+        books: updateBooksArray
+      });
+    } catch (err) {
+      console.log('We have an error: ', err.response.data);
+    }
+  }
+
+
   componentDidMount = () => {
     this.getBooks();
   }
@@ -95,6 +129,10 @@ class BestBooks extends React.Component {
             <p className='desStatus'>{book.description}</p>
             <p className='desStatus'>{book.status}</p>
             <Button onClick={() => this.handleDelete(book)}>Delete</Button>
+            <Button onClick={this.handleOpenUpdateModal}>Update Book</Button>
+            <UpdateBookForm show={this.state.openUpdateModal} onHide={this.handleCloseUpdateModal} updatedBook={this.updatedBook} book={book}/> 
+            
+            
           </Carousel.Caption>
         </Carousel.Item>
       );
